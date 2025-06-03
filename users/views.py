@@ -2,9 +2,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import Profile
+from .forms import CustomUSerCreationForm
 
 
 # Create your views here.
@@ -41,16 +41,21 @@ def logoutUser(request):
 
 def registerUser(request):
     page = 'register'
-    form = UserCreationForm()
+    form = CustomUSerCreationForm()
     
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = CustomUSerCreationForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
             user.username = user.username.lower()
             user.save()
             
             messages.success(request,'Created!')
+            login(request, user)
+            return redirect('profiles')
+        
+        else:
+            messages.error(request,'Error')
             
     context = {'page':page, 'form':form}
     return render(request, 'users/login_register.html',context)
