@@ -12,7 +12,7 @@ def project(request):
 
 def projectView(request, pk):
     projectObj = ProjectModel.objects.get(id=pk)
-    return render(request, 'projects/1.html', {'project': projectObj})
+    return render(request, 'projects/single-project.html', {'project': projectObj})
 
 
 @login_required(login_url='login')
