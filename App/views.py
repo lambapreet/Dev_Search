@@ -25,7 +25,7 @@ def createView(request):
             project = form.save(commit=False)
             project.owner = profile
             project.save()
-            return redirect('project')
+            return redirect('account')
     context = {'form': form}
     return render(request, 'projects/project_form.html', context)
 
@@ -52,7 +52,7 @@ def deleteView(request, pk):
         project.delete()
         return redirect('project')
     context = {'object': project}
-    return render(request, 'projects/delete.html', context)
+    return render(request, 'delete.html', context)
 
 
 
