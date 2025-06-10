@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.models import User
 from .models import Profile
-from .forms import CustomUSerCreationForm
+from .forms import CustomUSerCreationForm, ProfileForm
 
 
 # Create your views here.
@@ -85,3 +85,19 @@ def userAccount(request):
     context = {'profile':profile, 'skills':skills, 'projects':projects}
     
     return render(request, 'users/account.html')
+
+
+@login_required(login_url='login')
+def editAccount(request):
+    profile = request.user.profile
+    form = ProfileForm(instance=profile)
+    
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILE, instance=profile)
+        if form.is_valid():
+            form.save()
+            
+            return redirect('account')
+        
+    context = {'form':form}
+    return render(request, 'users/profile_form.html', context)
